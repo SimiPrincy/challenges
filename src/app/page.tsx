@@ -1,8 +1,18 @@
 "use client"
 import Image from "next/image";
 import { useEffect, useState } from "react";
+interface Coffee {
+  id: number;
+  name: string;
+  image: string;
+  price: number;
+  rating?: number;
+  votes?: number;
+  popular: boolean;
+  available: boolean;
+}
 
-const CoffeeCard = ({ coffee }) => {
+const CoffeeCard = ({ coffee }: { coffee: Coffee }) => {
   return (
     <div className="bg-gray-800 p-4 rounded-lg shadow-md text-white relative">
       {coffee.popular && (
