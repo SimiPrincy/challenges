@@ -34,7 +34,7 @@ const CoffeeCard = ({ coffee }: { coffee: Coffee }) => {
 };
 
 export default function Home() {
-  const [coffees, setCoffees] = useState([]);
+  const [coffees, setCoffees] = useState<Coffee[]>([]);
   const [showAvailable, setShowAvailable] = useState(false);
 
   useEffect(() => {
