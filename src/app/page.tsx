@@ -1,101 +1,74 @@
+"use client"
 import Image from "next/image";
+import { useEffect, useState } from "react";
+
+const CoffeeCard = ({ coffee }) => {
+  return (
+    <div className="bg-gray-800 p-4 rounded-lg shadow-md text-white relative">
+      {coffee.popular && (
+        <span className="absolute top-2 left-2 bg-yellow-400 text-black text-xs px-2 py-1 rounded">
+          Popular
+        </span>
+      )}
+      <img src={coffee.image} alt={coffee.name} className="w-full h-40 object-cover rounded-lg" />
+      <h3 className="mt-2 font-semibold">{coffee.name}</h3>
+      <p className="text-sm text-gray-300">${coffee.price}</p>
+      {coffee.rating && (
+        <p className="text-yellow-400 text-sm">
+          ⭐ {coffee.rating} ({coffee.votes} votes)
+        </p>
+      )}
+      {!coffee.available && <p className="text-red-500 text-sm">Sold Out</p>}
+    </div>
+  );
+};
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [coffees, setCoffees] = useState([]);
+  const [showAvailable, setShowAvailable] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  useEffect(() => {
+    fetch("https://raw.githubusercontent.com/devchallenges-io/curriculum/refs/heads/main/4-frontend-libaries/challenges/group_1/data/simple-coffee-listing-data.json")
+      .then((res) => res.json())
+      .then((data) => setCoffees(data))
+      .catch((error) => console.error("Error fetching coffee data:", error));
+  }, []);
+
+  const filteredCoffees = showAvailable ? coffees.filter(c => c.available) : coffees;
+  return (
+    <div className="bg-gray-950 min-h-screen font-[family-name:var(--font-geist-sans)]">
+      <Image 
+        src="/bg-cafe.jpg" 
+        width={500} 
+        height={500} 
+        alt="cafe" 
+        className="w-full h-[50vh] object-cover"
+      />
+      <div className="flex flex-row p-8 bg-gray-950 rounded-lg shadow-xl -mt-24 mx-36 relative">
+      <div className="max-w-4xl mx-auto text-center text-white">
+        <h1 className="text-3xl font-bold">Our Collection</h1>
+        <p className="text-gray-400 ">Introducing our coffee Collection, a selection of unique coffee from different roast types and origins, expertly roasted in small batches and shipped fresh weekly.</p>
+        <div className="mt-4">
+          <button
+            onClick={() => setShowAvailable(false)}
+            className={`px-4 py-2 rounded-l-lg ${!showAvailable ? "bg-gray-700" : "bg-gray-500"}`}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            All Products
+          </button>
+          <button
+            onClick={() => setShowAvailable(true)}
+            className={`px-4 py-2 rounded-r-lg ${showAvailable ? "bg-gray-700" : "bg-gray-500"}`}
           >
-            Read our docs
-          </a>
+            Available Now
+          </button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+          {filteredCoffees.map(coffee => (
+            <CoffeeCard key={coffee.id} coffee={coffee} />
+          ))}
+        </div>
+      </div>
+      </div>
     </div>
   );
 }
