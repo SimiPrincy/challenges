@@ -84,7 +84,7 @@ export default function Home() {
               <textarea
                 {...register('message', { required: 'Message is required' })}
                 className="w-full p-2 border rounded"
-                rows="4"
+                rows={4}
               ></textarea>
               {errors.message && <p className="text-red-500 text-sm">{errors.message.message}</p>}
             </div>
