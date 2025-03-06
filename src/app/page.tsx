@@ -15,7 +15,6 @@ export default function Home() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<FormData>();
   const [submitted, setSubmitted] = useState(false);
